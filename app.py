@@ -17,7 +17,7 @@ spotify_id = os.environ.get('SPOTIFY_ID')
 def webhook():
     name = "ram"
     email = "ram@ram.com"
-    u = User(id = id, nickname = name, email = email)
+    u = User(nickname = name, email = email)
     print("user created", u)
     db.session.add(u)
     db.session.commit()
