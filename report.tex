@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{booktabs,amssymb,makecell,rotating}
+\usepackage{fancyhdr}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage{fontawesome}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+\geometry{letterpaper, portrait, margin=1in}
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{\thesection}{1em}{}[{\titlerule[0.8pt]}]
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textbf{CS 1520 - Project Proposal}}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{\href{https://github.com/erichunzeker/SWE-Spring2019}{\faGithub \space github.com/erichunzeker/SWE-Spring2019}}
+
+
+
+\begin{document}
+
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+        
+        \LARGE
+        \textbf{CS 1520 - Project Proposal}
+        
+        \vspace{1.5cm}
+        
+        \textbf{Brian Choromanski (\href{https://github.com/Choromanski}{\faGithub \space Choromanski})\\Eric Hunzeker (\href{https://github.com/erichunzeker}{\faGithub \space EricHunzeker})\\Gerard McGlone(\href{https://github.com/jmcglone75}{\faGithub \space jmcglone75})}
+        
+        \vfill
+        
+        \href{https://github.com/erichunzeker/SWE-Spring2019}{\faGithub \space github.com/erichunzeker/SWE-Spring2019}
+        
+        \vspace{0.8cm}
+        
+        \normalsize
+        CS 1520\\
+        University of Pittsburgh\\
+        January 2019
+        
+    \end{center}
+\end{titlepage}
+
+\newpage
+\input{src/proposal.tex}
+
+
+\end{document}
