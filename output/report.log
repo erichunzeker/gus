@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2018.12.2)  29 JAN 2019 14:48
+This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2018.12.2)  29 JAN 2019 15:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -663,9 +663,6 @@ LaTeX Info: Redefining \nameref on input line 25.
 \openout3 = `report.out'.
 
 
-
-Package hyperref Warning: Rerun to get /PageLabels entry.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -818,53 +815,68 @@ Underfull \hbox (badness 10000) in paragraph at lines 83--84
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--108
+
+ []
+
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 102--103
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 110--111
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 118--119
+Underfull \hbox (badness 10000) in paragraph at lines 143--144
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 126--127
+Underfull \hbox (badness 10000) in paragraph at lines 151--152
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 134--135
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 142--143
+Underfull \hbox (badness 10000) in paragraph at lines 167--168
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 150--151
+Underfull \hbox (badness 10000) in paragraph at lines 175--176
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 158--159
+Underfull \hbox (badness 10000) in paragraph at lines 183--184
 
  []
 
 )
-Underfull \hbox (badness 10000) in paragraph at lines 166--57
+Underfull \hbox (badness 10000) in paragraph at lines 191--57
 
  []
 
@@ -880,18 +892,21 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
  )
-(\end occurred inside a group at level 20)
+(\end occurred inside a group at level 23)
 
-### simple group (level 20) entered at line 160 ({)
-### simple group (level 19) entered at line 152 ({)
-### simple group (level 18) entered at line 144 ({)
-### simple group (level 17) entered at line 136 ({)
-### simple group (level 16) entered at line 128 ({)
-### simple group (level 15) entered at line 120 ({)
-### simple group (level 14) entered at line 112 ({)
-### simple group (level 13) entered at line 104 ({)
-### simple group (level 12) entered at line 96 ({)
-### simple group (level 11) entered at line 88 ({)
+### simple group (level 23) entered at line 185 ({)
+### simple group (level 22) entered at line 177 ({)
+### simple group (level 21) entered at line 169 ({)
+### simple group (level 20) entered at line 161 ({)
+### simple group (level 19) entered at line 153 ({)
+### simple group (level 18) entered at line 145 ({)
+### simple group (level 17) entered at line 137 ({)
+### simple group (level 16) entered at line 129 ({)
+### simple group (level 15) entered at line 121 ({)
+### simple group (level 14) entered at line 113 ({)
+### simple group (level 13) entered at line 101 ({)
+### simple group (level 12) entered at line 93 ({)
+### simple group (level 11) entered at line 85 ({)
 ### simple group (level 10) entered at line 77 ({)
 ### simple group (level 9) entered at line 69 ({)
 ### simple group (level 8) entered at line 61 ({)
@@ -906,10 +921,10 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
 Here is how much of TeX's memory you used:
  23356 strings out of 493662
  408901 string characters out of 6148340
- 420823 words of memory out of 5000000
+ 423915 words of memory out of 5000000
  26619 multiletter control sequences out of 15000+600000
  4096 words of font info for 27 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 43i,12n,64p,10368b,646s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,11n,64p,10368b,688s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on output/report.pdf (6 pages).
