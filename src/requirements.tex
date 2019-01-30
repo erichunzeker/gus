@@ -1,4 +1,4 @@
-\newcommand*{\req}[5]{{\noindent{IDENTIFIER: \textbf{#1}}}\\{DESCRIPTION: #2\\}{PURPOSE: #3\\}{I/O: #4\\}{ACTORS/TRIGGERS: #5\\}}
+\newcommand*{\req}[4]{{\noindent{IDENTIFIER: \textbf{#1}}}\\{DESCRIPTION: #2\\}{PURPOSE: #3\\}{ACTORS/TRIGGERS: #4\\}}
 
 \section*{Functional Requirements}
 \singlespacing
@@ -7,7 +7,6 @@
 \req{Landing/Home Page}
 {User is greeted with GUS' homepage when they go the website }
 {To have a landing page}
-{I/O}
 {User enters "www.url of GUS.ext" in a browser}
 
 \noindent{\textbf{Functional Req 2.}
@@ -15,7 +14,6 @@
 \req{Search Bar present}
 {On the homepage, a search box for querying music is present.}
 {Easy and straightforward way to query music}
-{I/O}
 {User is on homepage}
 
 \noindent{\textbf{Functional Req 3.}
@@ -23,7 +21,6 @@
 \req{Live Query results}
 {As a user is typing a query in the search bar, a certain number of results are displayed in a list view below the bar in a live updating fashion. }
 {So user can potentially access a result without having to query in its entirety}
-{I/O}
 {User types the name of existent music}
 
 \noindent{\textbf{Functional Req 4.}
@@ -31,7 +28,6 @@
 \req{Select Song/Artist/Album}
 {Near the search bar is a selection for querying a song, artist, or album.}
 {To further refine the search to match the users wants.}
-{I/O}
 {User is on homepage.}
 
 \noindent{\textbf{Functional Req 5.}
@@ -39,7 +35,6 @@
 \req{Valid Song Search Results}
 {When a user chooses to query a song, and results for that song indeed exist, then they will be taken to a new page and presented with a list of songs of that name.}
 {To give the user a list of common songs matching the desired name.}
-{I/O}
 {User queries a song that is present on streaming services}
 
 \noindent{\textbf{Functional Req 6.}
@@ -47,7 +42,6 @@
 \req{Invalid Song Search Results}
 {When a user chooses to query a song, and no results for that name are found, then they will be taken to a new page and presented with "no songs found".}
 {To inform the user that their query did not return any results}
-{I/O}
 {User queries a string that doesn't match songs on any streaming services}
 
 \noindent{\textbf{Functional Req 7.}
@@ -55,7 +49,6 @@
 \req{Valid Artist Search Results}
 {When a user chooses to query an artist, and results for that artist indeed exist, then they will be taken to a new page and presented with a list of artists of that name.}
 {To give the user a list of common artists matching the desired name.}
-{I/O}
 {User queries an artist that is present on streaming services}
 
 \noindent{\textbf{Functional Req 8.}
@@ -63,7 +56,6 @@
 \req{Invalid Artist Search Results}
 {When a user chooses to query an artist, and no results for that name are found, then they will be taken to a new page and presented with "no artists found".}
 {To inform the user that their query did not return any results.}
-{I/O}
 {User queries a string that doesn't match artists on any streaming services.}
 
 \noindent{\textbf{Functional Req 9.}
@@ -71,7 +63,6 @@
 \req{Valid Album Search Results}
 {When a user chooses to query an album, and results for that album indeed exist, then they will be taken to a new page and presented with a list of albums of that name.}
 {To give the user a list of common albums matching the desired name.}
-{I/O}
 {User queries an album that is present on streaming services}
 
 \noindent{\textbf{Functional Req 10.}
@@ -79,7 +70,6 @@
 \req{Invalid Album Search Results}
 {When a user chooses to query an album, and no results for that name are found, then they will be taken to a new page and presented with "no albums found". }
 {To inform the user that their query did not return any results.}
-{I/O}
 {User queries a string that doesn't match albums on any streaming services.}
 
 \noindent{\textbf{Functional Req 11.}
@@ -87,7 +77,6 @@
 \req{Unique Link Generation}
 {When a user has a list of results from a valid query, they are able to click "generate link" for the desired result, which they can then copy and share with anyone}
 {A unique link for a song, artist, or album is a more compact, easier way to share music with a friend.}
-{I/O}
 {User queries a valid song, artist, or album and is on the results page.}
 
 \noindent{\textbf{Functional Req 12.}
@@ -95,7 +84,6 @@
 \req{Create User}
 {On the homepage, there are fields and a submission button for creating an account}
 {User can have an account registered with the service, which will automatically keep track of all links and the date in which they are generated}
-{I/O}
 {User is on homepage}
 
 \noindent{\textbf{Functional Req 13.}
@@ -103,7 +91,6 @@
 \req{User Login}
 {On the homepage, there are fields and a submission button for logging in as user}
 {User can have an account registered with the service, which will automatically keep track of all links and the date in which they are generated}
-{I/O}
 {User is on homepage}
 
 
@@ -115,7 +102,6 @@
 \req{Query timeout after 10 seconds}
 {When a user types an input, the website will take 10 seconds to filter results before timing out}
 {Prevent vague queries from making expensive calls to APIs or database}
-{I/O}
 {User types input}
 
 \noindent{\textbf{Non-Funcitonal Req 2.}
@@ -123,7 +109,6 @@
 \req{Navigating the website from start to finish should take 3 clicks at most}
 {The first click should choose the search result type, the second should highlight the search bar, and the third should click the desired result}
 {A maximum of 3 clicks to get to the desired result keeps the website simple and user friendly}
-{I/O}
 {User experience navigating website}
 
 \noindent{\textbf{Non-Funcitonal Req 3.}
@@ -131,15 +116,13 @@
 \req{Optimize User Interface for all browser types and screen sizes}
 {The website should maintain its intended look regardless of screen size or browser type}
 {This prevents users from experiencing glitchy software}
-{I/O}
-{Browser types & Devices}
+{Browser types \& Devices}
 
 \noindent{\textbf{Non-Funcitonal Req 4.}
 
 \req{Utilize MVC design pattern}
 {Develop with model, view, controller design pattern using Flask framework}
 {Website routing will be kept simple and minimal with MVC}
-{I/O}
 {Development}
 
 \noindent{\textbf{Non-Funcitonal Req 5.}
@@ -147,7 +130,6 @@
 \req{Use continuous integration}
 {Configure a continuous integration client to keep current build updated}
 {Keep each check-in verified by an automated build, allowing us to detect problems early}
-{I/O}
 {Version Control}
 
 \noindent{\textbf{Non-Funcitonal Req 6.}
@@ -155,7 +137,6 @@
 \req{Extensive testing}
 {All code written should have extensive coverage}
 {More code coverage in testing leads to less bugs in production code}
-{I/O}
 {Testing}
 
 \noindent{\textbf{Non-Funcitonal Req 7.}
@@ -163,7 +144,6 @@
 \req{Reusability}
 {Write code that can be used for multiple tasks}
 {Keep application lightweight and cut down on unnecessary code}
-{I/O}
 {Development}
 
 \noindent{\textbf{Non-Funcitonal Req 8.}
@@ -171,7 +151,6 @@
 \req{Scalability}
 {Keep all practices within application suitable for large and small amounts of data}
 {Develop with scalability as a priority to keep application fast regardless of traffic and use}
-{I/O}
 {Development}
 
 \noindent{\textbf{Non-Funcitonal Req 9.}
@@ -179,7 +158,6 @@
 \req{Security}
 {Deploy application with virtual environment so no keys are kept in plain text}
 {No keys kept in plain text to maximize security and minimize vulnerability}
-{I/O}
 {Deployment}
 
 \noindent{\textbf{Non-Funcitonal Req 10.}
@@ -187,5 +165,4 @@
 \req{Reliability}
 {Application should respond the same regardless of website traffic }
 {Keep users satisfied and maintain ease of use}
-{I/O}
 {Development/Deployment}
