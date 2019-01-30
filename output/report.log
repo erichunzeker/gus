@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2019/dev/Debian) (preloaded format=xelatex 2018.10.23)  29 JAN 2019 19:04
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2019/dev/Debian) (preloaded format=xelatex 2018.10.23)  29 JAN 2019 19:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -851,7 +851,7 @@ File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
 )
 [1
 
-] (./src/proposal.tex) [1] (./src/requirements.tex
+] (./src/requirements.tex
 Underfull \hbox (badness 10000) in paragraph at lines 10--11
 
  []
@@ -891,7 +891,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 59--60
 
  []
 
-[2]
+[1]
 Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
  []
@@ -916,7 +916,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 94--95
 
  []
 
-[3]
+[2]
 Underfull \hbox (badness 10000) in paragraph at lines 105--106
 
  []
@@ -961,24 +961,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 161--162
 
  []
 
-[4])
-Underfull \hbox (badness 10000) in paragraph at lines 168--57
+[3])
+Underfull \hbox (badness 10000) in paragraph at lines 168--55
 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 59.
-[5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 59.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 57.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 57.
  (output/report.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 59.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 59.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 57.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 57.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: .
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 57.
  )
 (\end occurred inside a group at level 23)
 
@@ -1007,12 +1007,12 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
 ### simple group (level 1) entered at line 5 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 21852 strings out of 492962
- 396710 string characters out of 6135708
- 488541 words of memory out of 5000000
+ 21849 strings out of 492962
+ 396668 string characters out of 6135708
+ 488545 words of memory out of 5000000
  25752 multiletter control sequences out of 15000+600000
  532778 words of font info for 35 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 46i,11n,60p,409b,686s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 46i,11n,60p,339b,686s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on output/report.pdf (6 pages).
+Output written on output/report.pdf (5 pages).
