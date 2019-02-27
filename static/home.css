@@ -10,6 +10,11 @@ body {
 }
 
 #inputMusic {
-    width: 50%;
+    width: 30%;
     display: inline-block;
 }
+
+#inputMusicNav {
+    background-color: #95afc0;
+}
+
