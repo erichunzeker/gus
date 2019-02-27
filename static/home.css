@@ -1,0 +1,15 @@
+body {
+}
+
+.form-group {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    text-align: center;
+
+}
+
+#inputMusic {
+    width: 50%;
+    display: inline-block;
+}

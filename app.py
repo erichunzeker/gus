@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -30,7 +30,7 @@ def webhook():
 
 @app.route('/delete/')
 def delete():
-    u = User.query.get(i)
+    u = User.query.get()
     db.session.delete(u)
     db.session.commit()
     return "user deleted"
