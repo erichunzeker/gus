@@ -19,6 +19,10 @@
 *.tar.gz
 *.rar
 
+.DS_Store
+.idea
+
+
 # Python Stuff
 __pycache__/*
 
