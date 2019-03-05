@@ -37,12 +37,14 @@ def webhook():
     db.session.commit()
     return "TEST"
 
-@app.route('/delete/')
-def delete():
-    u = User.query.get(i)
-    db.session.delete(u)
-    db.session.commit()
-    return "user deleted"
+@app.route('/s/<url>')
+def load(url):
+    song = db.session.query(Song).filter(Song.url == url)
+    if(song.count() == 0):
+        return "404 url not in database"
+    else:
+        return '<a href="https://open.spotify.com/track/'+ song[0].spotifyid+'">https://open.spotify.com/track/'+ song[0].spotifyid+'</a>'
+    
 
 if __name__ == '__main__':
     app.run()
