@@ -8,7 +8,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-from models import User
+from models import User, Song
 
 spotify_secret = os.environ.get('SPOTIFY_SECRET')
 spotify_id = os.environ.get('SPOTIFY_ID')
