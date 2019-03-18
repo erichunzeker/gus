@@ -73,53 +73,6 @@
     <title>GUS</title>
 </head>
 <body>
-<nav class="navbar navbar-fixed-top navbar-light" id="inputMusicNav">
-
-    <form class="form-inline">
-        <div id="searchbar">
-            <input class="form-control mr-sm-2 search-input" type="search" placeholder="enter a song, album, or artist" name="search" id="search">
-        </div>
-        <div id="musicType">
-            <ul class="nav nav-pills">
-                <li class="active">
-                    <a data-toggle="tab" href="#" id="menu_text">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a data-toggle="tab" href="#" id="menu_text2">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a data-toggle="tab" href="#" id="menu_text3">Link</a>
-                </li>
-
-            </ul>
-
-        </div>
-
-    </form>
-</nav>
-<p>{{ data }}</p>
-<div class="result-container">
-
-    <div class="list-group">
-
-        <form class="form-inline">
-            <a href="#" class="list-group-item list-group-item-action list-group-item-primary" id="test">
-                <img src="{{ data }}">
-                <p>song name</p>
-                <br>
-                <p>artist</p>
-            </a>
-        </form>
-        <form class="form-inline">
-            <a href="#" class="list-group-item list-group-item-action list-group-item-primary" id="test2">
-                <p>song name</p>
-                <br>
-                <p>artist</p>
-            </a>
-        </form>
-    </div>
-</div>
-
 
 {% block content %}{% endblock %}
 

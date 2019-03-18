@@ -1,4 +1,3 @@
-
 .form-group {
     padding-left: 20px;
     padding-right: 20px;
@@ -13,13 +12,18 @@
 
 #inputMusicNav {
     background-color: #95afc0;
+    padding: 2%;
 }
 
 .form-inline {
-    padding-top: 2%;
+
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+#box {
+    padding-top:2%;
 }
 
 .search-input {
@@ -48,13 +52,21 @@
 
 .list-group #test {
     width: 30%;
+    background-color: #95afc0;
+    color: white;
+
 }
 
 .list-group-item {
 
+
+}
+.list-group img {
+    width: 20%;
+    float: left;
 }
 
-#musicType {
-
+#img {
+    border-style: solid;
 }
 

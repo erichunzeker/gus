@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 import json, requests
@@ -27,12 +27,27 @@ spotify = spotipy.Spotify(auth=token)
 
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def homepage():
-    name="one dance"
-    results = spotify.search(q='track:' + name, type='track', limit=1)
-    print(results)
-    return render_template('home.html', data=results['tracks']['items'][0]['album']['images'][1]['url'])
+    error = None
+    if request.method == 'POST':
+        name = request.form['name']
+        results = spotify.search(q='track:' + name, type='track', limit=10)
+        count = 0
+        data = []
+
+        for i in results['tracks']['items']:
+            data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
+                        "name": results['tracks']['items'][count]['name'],
+                        "artist": results['tracks']['items'][count]['album']['artists'][0]['name']})
+            count += 1
+
+        print(data)
+        # make dict with limit of ten: img, name, artist
+        # [ {img, name, artist}, {img, name, artist} ]
+        return render_template('home.html', data=data)
+    return render_template('home.html', error=error)
+
 
 @app.route('/add/')
 def webhook():
