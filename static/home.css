@@ -17,14 +17,19 @@
 
 .form-inline {
     padding-top: 2%;
-    padding-bottom: 2%;
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.form-inline #search{
-    width: 30%;
+.search-input {
+    padding-top: 2%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.search-input #search{
+    width: 100%;
 }
 
 .form-inline #result{
@@ -49,4 +54,7 @@
 
 }
 
+#musicType {
+
+}
 
