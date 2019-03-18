@@ -2,30 +2,36 @@
 {% block content %}
 
 
-<nav class="navbar navbar-fixed-top navbar-light" id="inputMusicNav">
-
-    <form action="{{ url_for('homepage') }}" method="post" class="form-inline" id="searchform">
-        <div id="searchbar">
-            <input class="form-control mr-sm-2 search-input" type="search" placeholder="enter a song, album, or artist" name="name" id="search">
+<!--
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{{ url_for('homepage') }}" method="post">
+                <div class="input-group">
+                    <input type="text" name="name" id="search" value="test" placeholder="enter a song, album, or artist" class="form-control">
+                </div>
+            </form>
         </div>
-        <div id="musicType">
-            <ul class="nav nav-pills">
-                <li class="active">
-                    <a data-toggle="tab" href="#" id="menu_text">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a data-toggle="tab" href="#" id="menu_text2">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a data-toggle="tab" href="#" id="menu_text3">Link</a>
-                </li>
+    </div>
+</div>-->
 
-            </ul>
-
-        </div>
-
-    </form>
+<nav class="navbar navbar-expand-md navbar-light bg-faded" id="inputMusicNav">
+    <div class="navbar-collapse collapse" id="navbar5">
+        <form class="mx-2 my-auto d-inline w-50" action="{{ url_for('homepage') }}" method="post">
+            <div class="input-group">
+                <input type="text" name="name" class="form-control border border-right-0" placeholder="enter a song, album, or artist">
+                <span class="input-group-append">
+                <button class="btn btn-outline-secondary border border-left-0" style="background-color: white" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+        </form>
+    </div>
 </nav>
+
+
+
 <div class="result-container">
 
     <div class="list-group">

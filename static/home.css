@@ -1,22 +1,13 @@
-.form-group {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 20px;
-    text-align: center;
-
-}
-
-#inputMusic {
-    display: inline-block;
-}
-
 #inputMusicNav {
     background-color: #95afc0;
     padding: 2%;
 }
 
-.form-inline {
+#navbar5 {
+    justify-content: center;
+}
 
+.form-inline {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -26,30 +17,6 @@
     padding-top:2%;
 }
 
-.search-input {
-    padding-top: 2%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-.search-input #search{
-    width: 100%;
-}
-
-.form-inline #result{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.list-group {
-    padding-top: 2%;
-    padding-bottom: 2%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
 .list-group #test {
     width: 30%;
     background-color: #95afc0;
@@ -57,16 +24,12 @@
 
 }
 
-.list-group-item {
 
-
-}
 .list-group img {
     width: 20%;
     float: left;
 }
 
 #img {
-    border-style: solid;
+    border-radius: 5px;
 }
-
