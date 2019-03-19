@@ -32,16 +32,31 @@ def homepage():
     error = None
     if request.method == 'POST':
         name = request.form['name']
-        results = spotify.search(q='track:' + name, type='track', limit=10)
+        toggle = request.form['toggle']
+        results = spotify.search(q=toggle + ':' + name, type=toggle, limit=10)
         count = 0
         data = []
+        print(results)
 
-        for i in results['tracks']['items']:
-            data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
-                        "name": results['tracks']['items'][count]['name'],
-                        "artist": results['tracks']['items'][count]['album']['artists'][0]['name']})
-            count += 1
+        if toggle == 'track':
+            for i in results['tracks']['items']:
+                data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
+                            "name": results['tracks']['items'][count]['name'],
+                            "artist": results['tracks']['items'][count]['album']['artists'][0]['name']})
+                count += 1
 
+        elif toggle == 'artist':
+            for i in results['artists']['items']:
+                data.append({"img": results['artists']['items'][count]['images'][0]['url'],
+                            "name": results['artists']['items'][count]['name'],
+                            "artist": results['artists']['items'][count]['type']['artists'][0]['name']})
+                count += 1
+        else:
+            for i in results['albums']['items']:
+                data.append({"img": results['albums']['items'][count]['images'][0]['url'],
+                            "name": results['albums']['items'][count]['name'],
+                            "artist": results['albums']['items'][count]['artists'][0]['name']})
+                count += 1
         print(data)
         # make dict with limit of ten: img, name, artist
         # [ {img, name, artist}, {img, name, artist} ]
