@@ -42,3 +42,22 @@
 #img {
     border-radius: 5px;
 }
+
+#pills-tab {
+    padding-top:2%;
+}
+
+.nav-item {
+    padding-top: 3%;
+    padding-left:8%;
+    padding-right: 8%;
+    color:white;
+}
+
+.form-check-label {
+    padding: 2%;
+}
+
+.result-container {
+    padding-bottom: 5%;
+}
