@@ -38,13 +38,14 @@ def homepage():
         results = spotify.search(q=toggle + ':' + name, type=toggle, limit=10)
         count = 0
         data = []
-        print(results)
+        #print(results)
 
         if toggle == 'track':
             for i in results['tracks']['items']:
                 data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
                             "name": results['tracks']['items'][count]['name'],
-                            "artist": results['tracks']['items'][count]['album']['artists'][0]['name']})
+                            "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
+                            "spotifyid": results['tracks']['items'][count]['id']})
                 count += 1
 
         elif toggle == 'artist':
@@ -57,32 +58,31 @@ def homepage():
             for i in results['albums']['items']:
                 data.append({"img": results['albums']['items'][count]['images'][0]['url'],
                             "name": results['albums']['items'][count]['name'],
-                            "artist": results['albums']['items'][count]['artists'][0]['name']})
+                            "artist": results['albums']['items'][count]['artists'][0]['name'],
+                            "spotifyid": results['albums']['items'][count]['id']})
                 count += 1
-        print(data)
+        #print(data)
         # make dict with limit of ten: img, name, artist
         # [ {img, name, artist}, {img, name, artist} ]
-        return render_template('home.html', data=data)
+        return render_template('home.html', data=data, type=toggle)
     return render_template('home.html', error=error)
 
-
-@app.route('/add/')
-def webhook():
+def generateKey():
     key = secrets.token_urlsafe(6)
     while(db.session.query(Song).filter(Song.url == key).count() != 0):
        key = secrets.token_urlsafe(6)
-    print("Key: " + key)
-    credentials = SpotifyClientCredentials(spotify_id, spotify_secret)
-    token = credentials.get_access_token()
-    spotify = spotipy.Spotify(token)
-    song = 'We Rise'
-    artist = 'San Holo'
-    results = spotify.search(q=song + ' artist:' + artist, type='track')
-    print("SpotifyID: " + results['tracks']['items'][0]['id'])
-    song = Song(url=key, spotifyid=results['tracks']['items'][0]['id'])
+    return key
+
+@app.route('/create/<type>/<spotifyid>')
+def create(type, spotifyid):
+    key = generateKey()
+    print("HERE")
+    print(key)
+    print(type)
+    song = Song(url=key, type=type, spotifyid=spotifyid)
     db.session.add(song)
     db.session.commit()
-    return "TEST"
+    return redirect(url_for('load', url=key))
 
 @app.route('/s/<url>')
 def load(url):
@@ -90,7 +90,7 @@ def load(url):
     if(song.count() == 0):
         return "404 url not in database"
     else:
-        return '<a href="https://open.spotify.com/track/'+ song[0].spotifyid+'">https://open.spotify.com/track/'+ song[0].spotifyid+'</a>'
+        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'</a>'
 
 if __name__ == '__main__':
     app.run()
