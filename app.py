@@ -50,9 +50,14 @@ def homepage():
 
         elif toggle == 'artist':
             for i in results['artists']['items']:
-                data.append({"img": results['artists']['items'][count]['images'][0]['url'],
-                            "name": results['artists']['items'][count]['name'],
-                            "artist": results['artists']['items'][count]['type']['artists'][0]['name']})
+                if len(results['artists']['items'][count]['images']) == 0:
+                    data.append({"img": "static/img/note.png",
+                                 "name": results['artists']['items'][count]['name'],
+                                 "artist": results['artists']['items'][count]['name']})
+                else:
+                    data.append({"img": results['artists']['items'][count]['images'][0]['url'],
+                                "name": results['artists']['items'][count]['name'],
+                                "artist": results['artists']['items'][count]['name']})
                 count += 1
         else:
             for i in results['albums']['items']:
