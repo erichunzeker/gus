@@ -209,11 +209,13 @@ def getdata(toggle, query):
             if len(results['artists']['items'][count]['images']) == 0:
                 data.append({"img": "static/img/note.png",
                              "name": results['artists']['items'][count]['name'],
-                             "artist": results['artists']['items'][count]['name']})
+                             "artist": results['artists']['items'][count]['name'],
+                             "spotifyid": results['artists']['items'][count]['id']})
             else:
                 data.append({"img": results['artists']['items'][count]['images'][0]['url'],
                              "name": results['artists']['items'][count]['name'],
-                             "artist": results['artists']['items'][count]['name']})
+                             "artist": results['artists']['items'][count]['name'],
+                             "spotifyid": results['artists']['items'][count]['id']})
             count += 1
     else:
         for i in results['albums']['items']:
