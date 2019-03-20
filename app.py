@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from time import sleep
-import os, secrets, spotipy, pylast
+import os, secrets, spotipy, pylast, pprint
 import spotipy.oauth2 as oauth2
 
 app = Flask(__name__)
@@ -30,6 +30,8 @@ token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
 
 lastfm = pylast.LastFMNetwork(api_key=lastfm_id, api_secret=lastfm_secret)
+
+pp = pprint.PrettyPrinter(indent=4)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -62,11 +64,13 @@ def homepage():
                 if len(results['artists']['items'][count]['images']) == 0:
                     data.append({"img": "static/img/note.png",
                                  "name": results['artists']['items'][count]['name'],
-                                 "artist": results['artists']['items'][count]['name']})
+                                 "artist": results['artists']['items'][count]['name'],
+                                 "spotifyid": results['artists']['items'][count]['id']})
                 else:
                     data.append({"img": results['artists']['items'][count]['images'][0]['url'],
                                 "name": results['artists']['items'][count]['name'],
-                                "artist": results['artists']['items'][count]['name']})
+                                "artist": results['artists']['items'][count]['name'],
+                                "spotifyid": results['artists']['items'][count]['id']})
                 count += 1
         else:
             for i in results['albums']['items']:
@@ -109,7 +113,9 @@ def create(type, spotifyid):
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_track(artist, track).get_url()[26:]
     elif type == "artist":
-        result = spotify.artis(tspotifyid)
+        result = spotify.artist(spotifyid)
+        artist = result['name']
+        lstfm = lastfm.get_artist(artist).get_url()[26:]
     song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm)
     db.session.add(song)
     db.session.commit()
