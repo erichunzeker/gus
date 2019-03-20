@@ -26,7 +26,6 @@ tidal_secret = os.environ.get('TIDAL_PASSWORD')
 tidal_id = os.environ.get('TIDAL_LOGIN')
 
 
-
 credentials = oauth2.SpotifyClientCredentials(
         client_id=spotify_id,
         client_secret=spotify_secret)
@@ -136,6 +135,7 @@ def create(type, spotifyid):
                 tide = "track/" + str(i.id)
                 break
     elif type == "artist":
+        print("artist")
         result = spotify.artist(spotifyid)
         artist = result['name']
         lstfm = lastfm.get_artist(artist).get_url()[26:]
