@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<!--
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{{ url_for('homepage') }}" method="post">
+                <div class="input-group">
+                    <input type="text" name="name" id="search" value="test" placeholder="enter a song, album, or artist" class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>-->
+
+<nav class="navbar navbar-expand-md navbar-light bg-faded" id="inputMusicNav">
+    <div class="navbar-collapse collapse" id="navbar5">
+        <form class="mx-2 my-auto d-inline w-50" action="{{ url_for('homepage') }}" method="post">
+            <div class="input-group">
+                <input type="text" name="name" class="form-control border border-right-0" placeholder="enter a song, album, or artist">
+                <span class="input-group-append">
+                <button class="btn btn-outline-secondary border border-left-0" style="background-color: white" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+
+            <ul class="nav justify-content-center nav-pills mb-3" id="pills-tab" role="tablist" >
+                <li class="nav-item">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="toggle" id="inlineRadio1" value="track" checked>
+                        <label class="form-check-label" for="inlineRadio1">songs</label>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="toggle" id="inlineRadio2" value="artist">
+                        <label class="form-check-label" for="inlineRadio2">artists</label>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="toggle" id="inlineRadio3" value="album">
+                        <label class="form-check-label" for="inlineRadio3">albums</label>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+</nav>
+
+
+
+<div class="result-container">
+
+    <div class="list-group">
+        {% for result in data %}
+        <form class="form-inline" id="box">
+            <a href="{{  url_for('create', spotifyid=result.spotifyid, type=type )}}" class="list-group-item list-group-item-action list-group-item-primary" id="test">
+                <img src="{{ result.img }}" id="img">
+                <div id="data">
+                    <h4 id="name">{{ result.name }}</h4>
+                    <br>
+                    <p id="artist">{{ result.artist }}</p>
+                </div>
+            </a>
+        </form>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

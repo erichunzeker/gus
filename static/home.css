@@ -1,0 +1,63 @@
+#inputMusicNav {
+    background-color: #95afc0;
+    padding: 2%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#navbar5 {
+    justify-content: center;
+}
+
+.form-inline {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#box {
+    padding-top:2%;
+}
+
+.list-group #test {
+    width: 30%;
+    background-color: #95afc0;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+#data {
+    top:0;
+    bottom:0;
+    justify-content: center;
+    float: right;
+    width:50%;
+}
+
+.list-group img {
+    width: 40%;
+    float: left;
+}
+
+#img {
+    border-radius: 5px;
+}
+
+#pills-tab {
+    padding-top:2%;
+}
+
+.nav-item {
+    padding-top: 3%;
+    padding-left:8%;
+    padding-right: 8%;
+    color:white;
+}
+
+.form-check-label {
+    padding: 2%;
+}
+
+.result-container {
+    padding-bottom: 5%;
+}
