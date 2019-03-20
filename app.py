@@ -42,24 +42,41 @@ def homepage():
 
         if toggle == 'track':
             for i in results['tracks']['items']:
-                data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
-                            "name": results['tracks']['items'][count]['name'],
-                            "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
-                            "spotifyid": results['tracks']['items'][count]['id']})
+                if len(results['tracks']['items'][count]['album']['images']) == 0:
+                    data.append({"img": "static/img/note.png",
+                                 "name": results['tracks']['items'][count]['name'],
+                                 "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
+                                 "spotifyid": results['tracks']['items'][count]['id']})
+                else:
+                    data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
+                                "name": results['tracks']['items'][count]['name'],
+                                "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
+                                "spotifyid": results['tracks']['items'][count]['id']})
                 count += 1
 
         elif toggle == 'artist':
             for i in results['artists']['items']:
-                data.append({"img": results['artists']['items'][count]['images'][0]['url'],
-                            "name": results['artists']['items'][count]['name'],
-                            "artist": results['artists']['items'][count]['type']['artists'][0]['name']})
+                if len(results['artists']['items'][count]['images']) == 0:
+                    data.append({"img": "static/img/note.png",
+                                 "name": results['artists']['items'][count]['name'],
+                                 "artist": results['artists']['items'][count]['name']})
+                else:
+                    data.append({"img": results['artists']['items'][count]['images'][0]['url'],
+                                "name": results['artists']['items'][count]['name'],
+                                "artist": results['artists']['items'][count]['name']})
                 count += 1
         else:
             for i in results['albums']['items']:
-                data.append({"img": results['albums']['items'][count]['images'][0]['url'],
-                            "name": results['albums']['items'][count]['name'],
-                            "artist": results['albums']['items'][count]['artists'][0]['name'],
-                            "spotifyid": results['albums']['items'][count]['id']})
+                if len(results['albums']['items'][count]['images']) == 0:
+                    data.append({"img": "static/img/note.png",
+                                 "name": results['albums']['items'][count]['name'],
+                                 "artist": results['albums']['items'][count]['artists'][0]['name'],
+                                 "spotifyid": results['albums']['items'][count]['id']})
+                else:
+                    data.append({"img": results['albums']['items'][count]['images'][0]['url'],
+                                "name": results['albums']['items'][count]['name'],
+                                "artist": results['albums']['items'][count]['artists'][0]['name'],
+                                "spotifyid": results['albums']['items'][count]['id']})
                 count += 1
         #print(data)
         # make dict with limit of ten: img, name, artist
