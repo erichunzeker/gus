@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from time import sleep
-import os, secrets, spotipy, pylast, pprint
+import os, secrets, spotipy, pylast, pprint, deezer
 import spotipy.oauth2 as oauth2
 
 app = Flask(__name__)
@@ -20,6 +20,9 @@ spotify_secret = os.environ.get('SPOTIFY_SECRET')
 spotify_id = os.environ.get('SPOTIFY_ID')
 lastfm_secret = os.environ.get('LASTFM_SECRET')
 lastfm_id = os.environ.get('LASTFM_KEY')
+deezer_secret = os.environ.get('DEEZER_SECRET')
+deezer_id = os.environ.get('DEEZER_ID')
+
 
 
 credentials = oauth2.SpotifyClientCredentials(
@@ -30,6 +33,8 @@ token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
 
 lastfm = pylast.LastFMNetwork(api_key=lastfm_id, api_secret=lastfm_secret)
+
+deezerClient = deezer.Client()
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -106,17 +111,24 @@ def create(type, spotifyid):
         album = result['name']
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_album(artist, album).get_url()[26:]
+        deez = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
+        deez = "album/" + str(deez[0].asdict()['id'])
     elif type == "track":
         result = spotify.track(spotifyid)
         album = result['album']['name']
         track = result['name']
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_track(artist, track).get_url()[26:]
+        deez = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
+        deez = "track/" + str(deez[0].asdict()['id'])
     elif type == "artist":
+        print("artist")
         result = spotify.artist(spotifyid)
         artist = result['name']
         lstfm = lastfm.get_artist(artist).get_url()[26:]
-    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm)
+        deez = deezerClient.advanced_search({"artist": artist}, relation="artist")
+        deez = "artist/" + str(deez[0].asdict()['id'])
+    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez)
     db.session.add(song)
     db.session.commit()
     return redirect(url_for('load', url=key))
@@ -127,7 +139,7 @@ def load(url):
     if(song.count() == 0):
         return "404 url not in database"
     else:
-        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>'
+        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>'
 
 if __name__ == '__main__':
     app.run()
