@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from time import sleep
-import os, secrets, spotipy, pylast, pprint, deezer
+import os, secrets, spotipy, pylast, pprint, deezer, tidalapi
 import spotipy.oauth2 as oauth2
 
 app = Flask(__name__)
@@ -22,7 +22,8 @@ lastfm_secret = os.environ.get('LASTFM_SECRET')
 lastfm_id = os.environ.get('LASTFM_KEY')
 deezer_secret = os.environ.get('DEEZER_SECRET')
 deezer_id = os.environ.get('DEEZER_ID')
-
+tidal_secret = os.environ.get('TIDAL_PASSWORD')
+tidal_id = os.environ.get('TIDAL_LOGIN')
 
 
 credentials = oauth2.SpotifyClientCredentials(
@@ -35,6 +36,9 @@ spotify = spotipy.Spotify(auth=token)
 lastfm = pylast.LastFMNetwork(api_key=lastfm_id, api_secret=lastfm_secret)
 
 deezerClient = deezer.Client()
+
+tidal = tidalapi.Session()
+tidal.login(tidal_id, tidal_secret)
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -105,7 +109,6 @@ def generateKey():
 @app.route('/create/<type>/<spotifyid>')
 def create(type, spotifyid):
     key = generateKey()
-    lstfm = ""
     if type == "album":
         result = spotify.album(spotifyid)
         album = result['name']
@@ -113,6 +116,11 @@ def create(type, spotifyid):
         lstfm = lastfm.get_album(artist, album).get_url()[26:]
         deez = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
         deez = "album/" + str(deez[0].asdict()['id'])
+        tid = tidal.search('album', album)
+        for i in tid.albums:
+            if i.name.lower().strip() == album.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
+                tide = "album/" + str(i.id)
+                break
     elif type == "track":
         result = spotify.track(spotifyid)
         album = result['album']['name']
@@ -121,6 +129,11 @@ def create(type, spotifyid):
         lstfm = lastfm.get_track(artist, track).get_url()[26:]
         deez = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
         deez = "track/" + str(deez[0].asdict()['id'])
+        tid = tidal.search('track', track)
+        for i in tid.tracks:
+            if i.name.lower().strip() == track.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
+                tide = "track/" + str(i.id)
+                break
     elif type == "artist":
         print("artist")
         result = spotify.artist(spotifyid)
@@ -128,7 +141,12 @@ def create(type, spotifyid):
         lstfm = lastfm.get_artist(artist).get_url()[26:]
         deez = deezerClient.advanced_search({"artist": artist}, relation="artist")
         deez = "artist/" + str(deez[0].asdict()['id'])
-    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez)
+        tid = tidal.search('artist', artist)
+        for i in tid.artists:
+            if i.name.lower().strip() == artist.lower().strip():
+                tide = "artist/" + str(i.id)
+                break
+    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide)
     db.session.add(song)
     db.session.commit()
     return redirect(url_for('load', url=key))
@@ -139,7 +157,7 @@ def load(url):
     if(song.count() == 0):
         return "404 url not in database"
     else:
-        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>'
+        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>'
 
 if __name__ == '__main__':
     app.run()

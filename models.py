@@ -12,4 +12,5 @@ class Song(db.Model):
     spotifyid = db.Column(db.String(22))
     lastfm = db.Column(db.String(50))
     deezer = db.Column(db.String(50))
+    tidal = db.Column(db.String(50))
     #Other identifiers that we might need
