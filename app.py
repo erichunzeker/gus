@@ -27,6 +27,7 @@ tidal_secret = os.environ.get('TIDAL_PASSWORD')
 tidal_id = os.environ.get('TIDAL_LOGIN')
 google_id = os.environ.get('GOOGLE_KEY')
 soundcloud_id = os.environ.get('CX_SOUNDCLOUD')
+pandora_id = os.environ.get('CX_PANDORA')
 
 
 credentials = oauth2.SpotifyClientCredentials(
@@ -117,6 +118,8 @@ def generateKey():
 @app.route('/create/<type>/<spotifyid>')
 def create(type, spotifyid):
     key = generateKey()
+    soundcloud = "#"
+    pandora = "#"
     if type == "album":
         result = spotify.album(spotifyid)
         album = result['name']
@@ -134,6 +137,10 @@ def create(type, spotifyid):
             if '/sets/' in i['link']:
                 soundcloud = i['link'][23:]
                 break
+        result = google_search(album + " by " + artist, google_id, pandora_id)
+        for i in result['items']:
+            pandora = i['link'][31:]
+            break
     elif type == "track":
         result = spotify.track(spotifyid)
         album = result['album']['name']
@@ -151,6 +158,10 @@ def create(type, spotifyid):
         for i in result['items']:
             soundcloud = i['link'][23:]
             break
+        result = google_search(track + " by " + artist, google_id, pandora_id)
+        for i in result['items']:
+            pandora = i['link'][31:]
+            break
     elif type == "artist":
         result = spotify.artist(spotifyid)
         artist = result['name']
@@ -163,10 +174,11 @@ def create(type, spotifyid):
                 tide = "artist/" + str(i.id)
                 break
         # Unable to do SoundCloud for artist
-    if type == "artist":
-        song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide)
-    else:
-        song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud)
+        result = google_search(artist, google_id, pandora_id)
+        for i in result['items']:
+            pandora = i['link'][31:]
+            break
+    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud, pandora=pandora)
     db.session.add(song)
     db.session.commit()
     return redirect(url_for('load', url=key))
@@ -177,10 +189,10 @@ def load(url):
     if(song.count() == 0):
         return "404 url not in database"
     else:
-        if song[0].type == "artist":
-            return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>'
+        if song[0].soundcloud == "#":
+            return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>' + '<br><a href="https://pandora.com/artist/' + song[0].pandora + '">https://pandora.com/artist/' + song[0].pandora + '</a>'
         else:
-            return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>' + '<br><a href="https://soundcloud.com/' + song[0].soundcloud + '">https://soundcloud.com/' + song[0].soundcloud + '</a>'
+            return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>' + '<br><a href="https://soundcloud.com/' + song[0].soundcloud + '">https://soundcloud.com/' + song[0].soundcloud + '</a>' + '<br><a href="https://pandora.com/artist/' + song[0].pandora + '">https://pandora.com/artist/' + song[0].pandora + '</a>'
 
 if __name__ == '__main__':
     app.run()
