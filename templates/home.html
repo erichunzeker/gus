@@ -58,7 +58,7 @@
     <div class="list-group">
         {% for result in data %}
         <form class="form-inline" id="box">
-            <a href="#" class="list-group-item list-group-item-action list-group-item-primary" id="test">
+            <a href="{{  url_for('create', spotifyid=result.spotifyid, type=type )}}" class="list-group-item list-group-item-action list-group-item-primary" id="test">
                 <img src="{{ result.img }}" id="img">
                 <div id="data">
                     <h4 id="name">{{ result.name }}</h4>
