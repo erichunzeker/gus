@@ -1,7 +1,19 @@
 #inputMusicNav {
     background-color: #95afc0;
     padding: 2%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.2);}
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+      z-index: 500;
+
+}
+
+.result-container {
+  padding-top: 13%;
 }
 
 #navbar5 {
@@ -18,12 +30,17 @@
     padding-top:2%;
 }
 
+
 .list-group #test {
     width: 30%;
     background-color: #95afc0;
     color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.2);
 
+}
+
+#box :hover {
+    background-color: #535c68;
 }
 
 #data {

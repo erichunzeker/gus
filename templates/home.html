@@ -1,22 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
 
-
-<!--
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <form action="{{ url_for('homepage') }}" method="post">
-                <div class="input-group">
-                    <input type="text" name="name" id="search" value="test" placeholder="enter a song, album, or artist" class="form-control">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>-->
-
 <nav class="navbar navbar-expand-md navbar-light bg-faded" id="inputMusicNav">
-    <div class="navbar-collapse collapse" id="navbar5">
+    <div class="navbar-collapse " id="navbar5">
         <form class="mx-2 my-auto d-inline w-50" action="{{ url_for('homepage') }}" method="post">
             <div class="input-group">
                 <input type="text" name="name" class="form-control border border-right-0" placeholder="enter a song, album, or artist">
