@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from time import sleep
-import os, secrets, spotipy
+import os, secrets, spotipy, pylast
 import spotipy.oauth2 as oauth2
 
 app = Flask(__name__)
@@ -18,6 +18,8 @@ from models import User, Song
 
 spotify_secret = os.environ.get('SPOTIFY_SECRET')
 spotify_id = os.environ.get('SPOTIFY_ID')
+lastfm_secret = os.environ.get('LASTFM_SECRET')
+lastfm_id = os.environ.get('LASTFM_KEY')
 
 
 credentials = oauth2.SpotifyClientCredentials(
@@ -27,6 +29,7 @@ credentials = oauth2.SpotifyClientCredentials(
 token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
 
+lastfm = pylast.LastFMNetwork(api_key=lastfm_id, api_secret=lastfm_secret)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -76,10 +79,21 @@ def generateKey():
 @app.route('/create/<type>/<spotifyid>')
 def create(type, spotifyid):
     key = generateKey()
-    print("HERE")
-    print(key)
-    print(type)
-    song = Song(url=key, type=type, spotifyid=spotifyid)
+    lstfm = ""
+    if type == "album":
+        result = spotify.album(spotifyid)
+        album = result['name']
+        artist = result['artists'][0]['name']
+        lstfm = lastfm.get_album(artist, album).get_url()[26:]
+    elif type == "track":
+        result = spotify.track(spotifyid)
+        album = result['album']['name']
+        track = result['name']
+        artist = result['artists'][0]['name']
+        lstfm = lastfm.get_track(artist, track).get_url()[26:]
+    elif type == "artist":
+        result = spotify.artis(tspotifyid)
+    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm)
     db.session.add(song)
     db.session.commit()
     return redirect(url_for('load', url=key))
@@ -90,7 +104,7 @@ def load(url):
     if(song.count() == 0):
         return "404 url not in database"
     else:
-        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'</a>'
+        return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>'
 
 if __name__ == '__main__':
     app.run()
