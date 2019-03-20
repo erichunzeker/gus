@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template, Response, jsonify, abort
+from flask import Flask, request, redirect, url_for, render_template, Response, jsonify, abort, session
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from time import sleep
 import os, secrets, spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+import spotipy.oauth2 as oauth2
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
@@ -18,6 +18,53 @@ from models import User, Song
 
 spotify_secret = os.environ.get('SPOTIFY_SECRET')
 spotify_id = os.environ.get('SPOTIFY_ID')
+
+
+credentials = oauth2.SpotifyClientCredentials(
+        client_id=spotify_id,
+        client_secret=spotify_secret)
+
+token = credentials.get_access_token()
+spotify = spotipy.Spotify(auth=token)
+
+
+
+@app.route('/', methods=['GET', 'POST'])
+def homepage():
+    error = None
+    if request.method == 'POST':
+        name = request.form['name']
+        toggle = request.form['toggle']
+        results = spotify.search(q=toggle + ':' + name, type=toggle, limit=10)
+        count = 0
+        data = []
+        print(results)
+
+        if toggle == 'track':
+            for i in results['tracks']['items']:
+                data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
+                            "name": results['tracks']['items'][count]['name'],
+                            "artist": results['tracks']['items'][count]['album']['artists'][0]['name']})
+                count += 1
+
+        elif toggle == 'artist':
+            for i in results['artists']['items']:
+                data.append({"img": results['artists']['items'][count]['images'][0]['url'],
+                            "name": results['artists']['items'][count]['name'],
+                            "artist": results['artists']['items'][count]['type']['artists'][0]['name']})
+                count += 1
+        else:
+            for i in results['albums']['items']:
+                data.append({"img": results['albums']['items'][count]['images'][0]['url'],
+                            "name": results['albums']['items'][count]['name'],
+                            "artist": results['albums']['items'][count]['artists'][0]['name']})
+                count += 1
+        print(data)
+        # make dict with limit of ten: img, name, artist
+        # [ {img, name, artist}, {img, name, artist} ]
+        return render_template('home.html', data=data)
+    return render_template('home.html', error=error)
+
 
 @app.route('/add/')
 def webhook():
@@ -44,7 +91,6 @@ def load(url):
         return "404 url not in database"
     else:
         return '<a href="https://open.spotify.com/track/'+ song[0].spotifyid+'">https://open.spotify.com/track/'+ song[0].spotifyid+'</a>'
-    
 
 if __name__ == '__main__':
     app.run()
