@@ -28,14 +28,20 @@
 <div id="shareable">
     <table>
         <tr>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">spotify</a>
+            <td>
+                <a href="{{ info['spotify'] }}" target="_blank">spotify</a>
             </td>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">apple music</a>
+            <td>
+                <a href="{{ info['lastfm']}}" target="_blank">last.fm</a>
             </td>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">deezer</a>
+            <td>
+                <a href="{{ info['deezer']}}" target="_blank">deezer</a>
+            </td>
+            <td>
+                <a href="{{ info['tidal']}}" target="_blank">tidal</a>
+            </td>
+            <td>
+                <a href="{{ info['play']}}" target="_blank">google play</a>
             </td>
         </tr>
     </table>
