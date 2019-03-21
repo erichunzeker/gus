@@ -173,7 +173,14 @@ def load(url):
         # v v v pass in links to this dictionary list v v v
         links = [{'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}]
         data = fetchattributes(song[0].type, song[0].spotifyid)
-        return render_template('landing.html', link=links, data=data, url=url)
+        if song[0].type == 'track':
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
+        elif song[0].type == 'album':
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
+        else:
+            info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
+
+        return render_template('landing.html', link=links, data=data, url=url, info=info )
 
 
 def fetchattributes(type, id):

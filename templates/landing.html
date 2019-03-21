@@ -1,14 +1,14 @@
 {% extends "musiclayout.html" %}
 {% block title %}
-<title>{{ data['name'] }} - {{ data['artists'][0]['name'] }}</title>
+<title>{{ info['name'] }} - {{ info['artist'] }}</title>
 {% endblock%}
 
 {% block content %}
 
 <div class="container" id="musiccard">
-    <img src="{{ data['album']['images'][0]['url'] }}">
-    <h4>{{ data['name'] }}</h4>
-    <p>{{ data['artists'][0]['name'] }}</p>
+    <img src="{{ info['img'] }}">
+    <h4>{{ info['name'] }}</h4>
+    <p>{{ info['artist'] }}</p>
     <table>
         <tr>
             <td align="center">
@@ -41,9 +41,5 @@
     </table>
 </div>
 
-<!--<a href="{{ link[0]['spotify'] }}" target="_blank">{{ link[0]['spotify'] }}</a>
-<p>{{ data['name'] }}</p>
-<a href="g-u-s.herokuapp.com/s/{{ url }}">g-u-s.herokuapp.com/s/{{ url }}</a>
-<p>{{ data['album']['images'][0]['url'] }}</p>-->
 
 {% endblock %}
