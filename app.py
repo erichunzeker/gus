@@ -84,6 +84,10 @@ def create(type, spotifyid):
     soundcloud = "#"
     pandora = "#"
     play = "#"
+
+    tide = None
+    play = None
+
     if type == "album":
         result = spotify.album(spotifyid)
         album = result['name']
@@ -160,6 +164,7 @@ def create(type, spotifyid):
                 print(i['link'])
                 play = i['link'][36:]
                 break
+    pandora = "pandorasucks"
     song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud, pandora=pandora, play=play)
     db.session.add(song)
     db.session.commit()
@@ -182,18 +187,44 @@ def load(url):
         # soundcloudbase = "https://soundcloud.com/"
         # pandorabase = ""
         playbase = "https://play.google.com/store/music/"
+
+        if not song[0].spotifyid:
+            spid = "nein"
+        else:
+            spid = song[0].spotifyid
+
+        if not song[0].lastfm:
+            lfm = "nein"
+        else:
+            lfm = song[0].lastfm
+
+        if not song[0].deezer:
+            dz = "nein"
+        else:
+            dz = song[0].deezer
+
+        if not song[0].tidal:
+            tid = "nein"
+        else:
+            tid = song[0].tidal
+
+        if not song[0].play:
+            pl = "nein"
+        else:
+            pl = song[0].play
+
         if song[0].type == 'track':
             info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url'],
-                    'spotify': spotifybase + song[0].spotifyid, 'lastfm': lastfmbase + song[0].lastfm, 'deezer': deezerbase + song[0].deezer,
-                    'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + lfm, 'deezer': deezerbase + dz,
+                    'tidal': tidalbase + tid, 'play': playbase + pl}
         elif song[0].type == 'album':
             info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url'],
-                    'spotify': spotifybase + song[0].spotifyid, 'lastfm': lastfmbase + song[0].lastfm,
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + song[0].lastfm,
                     'deezer': deezerbase + song[0].deezer,
                     'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
         else:
             info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url'],
-                    'spotify': spotifybase + song[0].spotifyid, 'lastfm': lastfmbase + song[0].lastfm,
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + song[0].lastfm,
                     'deezer': deezerbase + song[0].deezer,
                     'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
 
