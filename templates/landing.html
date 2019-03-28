@@ -1,0 +1,45 @@
+{% extends "musiclayout.html" %}
+{% block title %}
+<title>{{ info['name'] }} - {{ info['artist'] }}</title>
+{% endblock%}
+
+{% block content %}
+
+<div class="container" id="musiccard">
+    <img src="{{ info['img'] }}">
+    <h4>{{ info['name'] }}</h4>
+    <p>{{ info['artist'] }}</p>
+    <table>
+        <tr>
+            <td align="center">
+                <a href="g-u-s.herokuapp.com/s/{{ url }}">copy link</a>
+            </td>
+            <td align="center">
+                <a href="g-u-s.herokuapp.com/s/{{ url }}">copy link</a>
+            </td>
+            <td align="center">
+                <a href="g-u-s.herokuapp.com/s/{{ url }}">copy link</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div id="shareable">
+    <table>
+        <tr>
+            <td align="center">
+                <a href="g-u-s.herokuapp.com/s/{{ url }}">spotify</a>
+            </td>
+            <td align="center">
+                <a href="g-u-s.herokuapp.com/s/{{ url }}">apple music</a>
+            </td>
+            <td align="center">
+                <a href="g-u-s.herokuapp.com/s/{{ url }}">deezer</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+{% endblock %}

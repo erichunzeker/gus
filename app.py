@@ -30,10 +30,9 @@ soundcloud_id = os.environ.get('CX_SOUNDCLOUD')
 pandora_id = os.environ.get('CX_PANDORA')
 play_id = os.environ.get('CX_PLAY_MUSIC')
 
-
 credentials = oauth2.SpotifyClientCredentials(
-        client_id=spotify_id,
-        client_secret=spotify_secret)
+    client_id=spotify_id,
+    client_secret=spotify_secret)
 
 token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
@@ -59,66 +58,30 @@ def homepage():
     if request.method == 'POST':
         name = request.form['name']
         toggle = request.form['toggle']
-        results = spotify.search(q=toggle + ':' + name, type=toggle, limit=10)
-        count = 0
-        data = []
-        #print(results)
-
-        if toggle == 'track':
-            for i in results['tracks']['items']:
-                if len(results['tracks']['items'][count]['album']['images']) == 0:
-                    data.append({"img": "static/img/note.png",
-                                 "name": results['tracks']['items'][count]['name'],
-                                 "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
-                                 "spotifyid": results['tracks']['items'][count]['id']})
-                else:
-                    data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
-                                "name": results['tracks']['items'][count]['name'],
-                                "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
-                                "spotifyid": results['tracks']['items'][count]['id']})
-                count += 1
-
-        elif toggle == 'artist':
-            for i in results['artists']['items']:
-                if len(results['artists']['items'][count]['images']) == 0:
-                    data.append({"img": "static/img/note.png",
-                                 "name": results['artists']['items'][count]['name'],
-                                 "artist": results['artists']['items'][count]['name'],
-                                 "spotifyid": results['artists']['items'][count]['id']})
-                else:
-                    data.append({"img": results['artists']['items'][count]['images'][0]['url'],
-                                "name": results['artists']['items'][count]['name'],
-                                "artist": results['artists']['items'][count]['name'],
-                                "spotifyid": results['artists']['items'][count]['id']})
-                count += 1
-        else:
-            for i in results['albums']['items']:
-                if len(results['albums']['items'][count]['images']) == 0:
-                    data.append({"img": "static/img/note.png",
-                                 "name": results['albums']['items'][count]['name'],
-                                 "artist": results['albums']['items'][count]['artists'][0]['name'],
-                                 "spotifyid": results['albums']['items'][count]['id']})
-                else:
-                    data.append({"img": results['albums']['items'][count]['images'][0]['url'],
-                                "name": results['albums']['items'][count]['name'],
-                                "artist": results['albums']['items'][count]['artists'][0]['name'],
-                                "spotifyid": results['albums']['items'][count]['id']})
-                count += 1
-        #print(data)
-        # make dict with limit of ten: img, name, artist
-        # [ {img, name, artist}, {img, name, artist} ]
+        data = getdata(toggle, name)
         return render_template('home.html', data=data, type=toggle)
     return render_template('home.html', error=error)
 
+
 def generateKey():
     key = secrets.token_urlsafe(6)
-    while(db.session.query(Song).filter(Song.url == key).count() != 0):
-       key = secrets.token_urlsafe(6)
+    while db.session.query(Song).filter(Song.url == key).count() != 0:
+        key = secrets.token_urlsafe(6)
     return key
+
 
 @app.route('/create/<type>/<spotifyid>')
 def create(type, spotifyid):
+    print('here')
+    song = db.session.query(Song).filter(Song.spotifyid == spotifyid and Song.type == type)
+    print(song.count())
+    if song.count() != 0:
+        return redirect(url_for('load', url=song[0].url))
+
     key = generateKey()
+    lstfm = "#"
+    deez = "#"
+    tide = "#"
     soundcloud = "#"
     pandora = "#"
     play = "#"
@@ -203,16 +166,82 @@ def create(type, spotifyid):
     db.session.commit()
     return redirect(url_for('load', url=key))
 
+
 @app.route('/s/<url>')
 def load(url):
     song = db.session.query(Song).filter(Song.url == url)
-    if(song.count() == 0):
+    if song.count() == 0:
         return "404 url not in database"
     else:
-        if song[0].soundcloud == "#":
-            return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>' + '<br><a href="https://pandora.com/artist/' + song[0].pandora + '">https://pandora.com/artist/' + song[0].pandora + '</a>' + '<br><a href="https://play.google.com/store/music/' + song[0].play + '">https://play.google.com/store/music/' + song[0].play + '</a>'
+        # v v v pass in links to this dictionary list v v v
+        links = [{'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}]
+        data = fetchattributes(song[0].type, song[0].spotifyid)
+        if song[0].type == 'track':
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
+        elif song[0].type == 'album':
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
         else:
-            return '<a href="https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid+'">https://open.spotify.com/' + song[0].type + '/'+ song[0].spotifyid + '</a><br><a href="https://www.last.fm/music/' + song[0].lastfm + '">https://www.last.fm/music/' + song[0].lastfm + '</a>' + '<br><a href="https://www.deezer.com/' + song[0].deezer + '">https://www.deezer.com/' + song[0].deezer + '</a>' + '<br><a href="https://tidal.com/browse/' + song[0].tidal + '">https://tidal.com/browse/' + song[0].tidal + '</a>' + '<br><a href="https://soundcloud.com/' + song[0].soundcloud + '">https://soundcloud.com/' + song[0].soundcloud + '</a>' + '<br><a href="https://pandora.com/artist/' + song[0].pandora + '">https://pandora.com/artist/' + song[0].pandora + '</a>' + '<br><a href="https://play.google.com/store/music/' + song[0].play + '">https://play.google.com/store/music/' + song[0].play + '</a>'
+            info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
+
+        return render_template('landing.html', link=links, data=data, url=url, info=info )
+
+
+def fetchattributes(type, id):
+    if type == 'track':
+        return spotify.track(id)
+    elif type == 'album':
+        return spotify.album(id)
+    else:
+        return spotify.artist(id)
+
+
+def getdata(toggle, query):
+    count = 0
+    data = []
+    results = spotify.search(q=toggle + ':' + query, type=toggle, limit=15)
+
+    if toggle == 'track':
+        for i in results['tracks']['items']:
+            if len(results['tracks']['items'][count]['album']['images']) == 0:
+                data.append({"img": "static/img/note.png",
+                             "name": results['tracks']['items'][count]['name'],
+                             "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
+                             "spotifyid": results['tracks']['items'][count]['id']})
+            else:
+                data.append({"img": results['tracks']['items'][count]['album']['images'][0]['url'],
+                             "name": results['tracks']['items'][count]['name'],
+                             "artist": results['tracks']['items'][count]['album']['artists'][0]['name'],
+                             "spotifyid": results['tracks']['items'][count]['id']})
+            count += 1
+
+    elif toggle == 'artist':
+        for i in results['artists']['items']:
+            if len(results['artists']['items'][count]['images']) == 0:
+                data.append({"img": "static/img/note.png",
+                             "name": results['artists']['items'][count]['name'],
+                             "artist": results['artists']['items'][count]['name'],
+                             "spotifyid": results['artists']['items'][count]['id']})
+            else:
+                data.append({"img": results['artists']['items'][count]['images'][0]['url'],
+                             "name": results['artists']['items'][count]['name'],
+                             "artist": results['artists']['items'][count]['name'],
+                             "spotifyid": results['artists']['items'][count]['id']})
+            count += 1
+    else:
+        for i in results['albums']['items']:
+            if len(results['albums']['items'][count]['images']) == 0:
+                data.append({"img": "static/img/note.png",
+                             "name": results['albums']['items'][count]['name'],
+                             "artist": results['albums']['items'][count]['artists'][0]['name'],
+                             "spotifyid": results['albums']['items'][count]['id']})
+            else:
+                data.append({"img": results['albums']['items'][count]['images'][0]['url'],
+                             "name": results['albums']['items'][count]['name'],
+                             "artist": results['albums']['items'][count]['artists'][0]['name'],
+                             "spotifyid": results['albums']['items'][count]['id']})
+            count += 1
+
+    return data
 
 if __name__ == '__main__':
     app.run()
