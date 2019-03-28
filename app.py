@@ -79,6 +79,9 @@ def create(type, spotifyid):
         return redirect(url_for('load', url=song[0].url))
 
     key = generateKey()
+    lstfm = "#"
+    deez = "#"
+    tide = "#"
     soundcloud = "#"
     pandora = "#"
     play = "#"
