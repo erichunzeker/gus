@@ -14,6 +14,6 @@ class Song(db.Model):
     deezer = db.Column(db.String(100))
     tidal = db.Column(db.String(100))
     soundcloud = db.Column(db.String(100))
-    pandora = db.Column(db.String(100))
+    pandora = db.Column(db.String(300))
     play = db.Column(db.String(100))
     #Other identifiers that we might need
