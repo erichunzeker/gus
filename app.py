@@ -98,20 +98,23 @@ def create(type, spotifyid):
                 tide = "album/" + str(i.id)
                 break
         result = google_search(album + " by " + artist, google_id, soundcloud_id)
-        for i in result['items']:
-            if '/sets/' in i['link']:
-                soundcloud = i['link'][23:]
-                break
+        if 'item' in result.keys():
+            for i in result['items']:
+                if '/sets/' in i['link']:
+                    soundcloud = i['link'][23:]
+                    break
         result = google_search(album + " by " + artist, google_id, pandora_id)
-        for i in result['items']:
-            pandora = i['link'][31:]
-            break
-        result = google_search(album + " by " + artist, google_id, play_id)
-        for i in result['items']:
-            if 'https://play.google.com/store/music/' in i['link']:
-                print(i['link'])
-                play = i['link'][36:]
+        if 'item' in result.keys():
+            for i in result['items']:
+                pandora = i['link'][31:]
                 break
+        result = google_search(album + " by " + artist, google_id, play_id)
+        if 'item' in result.keys():
+            for i in result['items']:
+                if 'https://play.google.com/store/music/' in i['link']:
+                    print(i['link'])
+                    play = i['link'][36:]
+                    break
     elif type == "track":
         result = spotify.track(spotifyid)
         album = result['album']['name']
@@ -126,19 +129,22 @@ def create(type, spotifyid):
                 tide = "track/" + str(i.id)
                 break
         result = google_search(track + " by " + artist, google_id, soundcloud_id)
-        for i in result['items']:
-            soundcloud = i['link'][23:]
-            break
-        result = google_search(track + " by " + artist, google_id, pandora_id)
-        for i in result['items']:
-            pandora = i['link'][31:]
-            break
-        result = google_search(track + " by " + artist, google_id, play_id)
-        for i in result['items']:
-            if 'https://play.google.com/store/music/' in i['link']:
-                print(i['link'])
-                play = i['link'][36:]
+        if 'item' in result.keys():
+            for i in result['items']:
+                soundcloud = i['link'][23:]
                 break
+        result = google_search(track + " by " + artist, google_id, pandora_id)
+        if 'item' in result.keys():
+            for i in result['items']:
+                pandora = i['link'][31:]
+                break
+        result = google_search(track + " by " + artist, google_id, play_id)
+        if 'item' in result.keys():
+            for i in result['items']:
+                if 'https://play.google.com/store/music/' in i['link']:
+                    print(i['link'])
+                    play = i['link'][36:]
+                    break
     elif type == "artist":
         result = spotify.artist(spotifyid)
         artist = result['name']
@@ -146,21 +152,24 @@ def create(type, spotifyid):
         deez = deezerClient.advanced_search({"artist": artist}, relation="artist")
         deez = "artist/" + str(deez[0].asdict()['id'])
         tid = tidal.search('artist', artist)
-        for i in tid.artists:
-            if i.name.lower().strip() == artist.lower().strip():
-                tide = "artist/" + str(i.id)
-                break
+        if 'item' in result.keys():
+            for i in tid.artists:
+                if i.name.lower().strip() == artist.lower().strip():
+                    tide = "artist/" + str(i.id)
+                    break
         # Unable to do SoundCloud for artist
         result = google_search(artist, google_id, pandora_id)
-        for i in result['items']:
-            pandora = i['link'][31:]
-            break
-        result = google_search(artist, google_id, play_id)
-        for i in result['items']:
-            if 'https://play.google.com/store/music/' in i['link']:
-                print(i['link'])
-                play = i['link'][36:]
+        if 'item' in result.keys():
+            for i in result['items']:
+                pandora = i['link'][31:]
                 break
+        result = google_search(artist, google_id, play_id)
+        if 'item' in result.keys():
+            for i in result['items']:
+                if 'https://play.google.com/store/music/' in i['link']:
+                    print(i['link'])
+                    play = i['link'][36:]
+                    break
     song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud, pandora=pandora, play=play)
     db.session.add(song)
     db.session.commit()
@@ -177,11 +186,20 @@ def load(url):
         links = [{'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}]
         data = fetchattributes(song[0].type, song[0].spotifyid)
         if song[0].type == 'track':
-            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
+            if len(data['images']) != 0:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
+            else:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
         elif song[0].type == 'album':
-            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
+            if len(data['images']) != 0:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
+            else:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
         else:
-            info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
+            if len(data['images']) != 0:
+                info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
+            else:
+                info = {'name': data['name'], 'artist': data['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
 
         return render_template('landing.html', link=links, data=data, url=url, info=info )
 
