@@ -29,14 +29,38 @@
     <table>
         <tr>
             <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">spotify</a>
+                <a href="https://open.spotify.com/{{ song.type }}/{{ song.spotifyid }}">spotify</a>
             </td>
+            {% if song.lastfm != "#" %}
             <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">apple music</a>
+                <a href="https://www.last.fm/music/{{ song.lastfm }}">last fm</a>
             </td>
+            {% endif %}
+            {% if song.deezer != "#" %}
             <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">deezer</a>
+                <a href="https://www.deezer.com/{{ song.deezer }}">deezer</a>
             </td>
+            {% endif %}
+            {% if song.tidal != "#" %}
+            <td align="center">
+                <a href="https://tidal.com/browse/{{ song.tidal }}">tidal</a>
+            </td>
+            {% endif %}
+            {% if song.soundcloud != "#" %}
+            <td align="center">
+                <a href="https://soundcloud.com/{{ song.soundcloud }}">soundcloud</a>
+            </td>
+            {% endif %}
+            {% if song.pandora != "#" %}
+            <td align="center">
+                <a href="https://pandora.com/artist/{{ song.pandora }}">pandora</a>
+            </td>
+            {% endif %}
+            {% if song.play != "#" %}
+            <td align="center">
+                <a href="https://play.google.com/store/music/{{ song.play }}">play music</a>
+            </td>
+            {% endif %}
         </tr>
     </table>
 </div>

@@ -90,8 +90,9 @@ def create(type, spotifyid):
         album = result['name']
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_album(artist, album).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
-        deez = "album/" + str(deez[0].asdict()['id'])
+        deezer = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
+        if len(deezer) != 0:
+            deez = "album/" + str(deez[0].asdict()['id'])
         tid = tidal.search('album', album)
         for i in tid.albums:
             if i.name.lower().strip() == album.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
@@ -121,8 +122,9 @@ def create(type, spotifyid):
         track = result['name']
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_track(artist, track).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
-        deez = "track/" + str(deez[0].asdict()['id'])
+        deezer = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
+        if len(deezer) != 0:
+            deez = "track/" + str(deezer[0].asdict()['id'])
         tid = tidal.search('track', track)
         for i in tid.tracks:
             if i.name.lower().strip() == track.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
@@ -149,8 +151,9 @@ def create(type, spotifyid):
         result = spotify.artist(spotifyid)
         artist = result['name']
         lstfm = lastfm.get_artist(artist).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist}, relation="artist")
-        deez = "artist/" + str(deez[0].asdict()['id'])
+        deezer = deezerClient.advanced_search({"artist": artist}, relation="artist")
+        if len(deezer) != 0:
+            deez = "artist/" + str(deez[0].asdict()['id'])
         tid = tidal.search('artist', artist)
         if 'item' in result.keys():
             for i in tid.artists:
@@ -201,7 +204,7 @@ def load(url):
             else:
                 info = {'name': data['name'], 'artist': data['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
 
-        return render_template('landing.html', link=links, data=data, url=url, info=info )
+        return render_template('landing.html', link=links, data=data, url=url, info=info, song=song[0])
 
 
 def fetchattributes(type, id):
