@@ -186,7 +186,7 @@ def load(url):
         links = [{'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}]
         data = fetchattributes(song[0].type, song[0].spotifyid)
         if song[0].type == 'track':
-            if len(data['images']) != 0:
+            if len(data['album']['images']) != 0:
                 info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
             else:
                 info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
