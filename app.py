@@ -5,8 +5,7 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from time import sleep
-from googleapiclient.discovery import build
-import os, secrets, spotipy, pylast, pprint, deezer, tidalapi
+import os, secrets, spotipy, pylast, pprint
 import spotipy.oauth2 as oauth2
 
 app = Flask(__name__)
@@ -16,19 +15,11 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 from models import User, Song
+from services import get_services, google_search, Deezer, Tidal, Soundcloud, Pandora, Play
 
+#gather and setup spotify credentials
 spotify_secret = os.environ.get('SPOTIFY_SECRET')
 spotify_id = os.environ.get('SPOTIFY_ID')
-lastfm_secret = os.environ.get('LASTFM_SECRET')
-lastfm_id = os.environ.get('LASTFM_KEY')
-deezer_secret = os.environ.get('DEEZER_SECRET')
-deezer_id = os.environ.get('DEEZER_ID')
-tidal_secret = os.environ.get('TIDAL_PASSWORD')
-tidal_id = os.environ.get('TIDAL_LOGIN')
-google_id = os.environ.get('GOOGLE_KEY')
-soundcloud_id = os.environ.get('CX_SOUNDCLOUD')
-pandora_id = os.environ.get('CX_PANDORA')
-play_id = os.environ.get('CX_PLAY_MUSIC')
 
 credentials = oauth2.SpotifyClientCredentials(
     client_id=spotify_id,
@@ -37,20 +28,7 @@ credentials = oauth2.SpotifyClientCredentials(
 token = credentials.get_access_token()
 spotify = spotipy.Spotify(auth=token)
 
-lastfm = pylast.LastFMNetwork(api_key=lastfm_id, api_secret=lastfm_secret)
-
-deezerClient = deezer.Client()
-
-tidal = tidalapi.Session()
-tidal.login(tidal_id, tidal_secret)
-
-
 pp = pprint.PrettyPrinter(indent=4)
-
-def google_search(search_term, api_key, cse_id, **kwargs):
-    service = build("customsearch", "v1", developerKey=api_key)
-    res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
-    return res
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -72,101 +50,40 @@ def generateKey():
 
 @app.route('/create/<type>/<spotifyid>')
 def create(type, spotifyid):
-    print('here')
     song = db.session.query(Song).filter(Song.spotifyid == spotifyid and Song.type == type)
-    print(song.count())
     if song.count() != 0:
         return redirect(url_for('load', url=song[0].url))
-
+    
     key = generateKey()
-    lstfm = "#"
-    deez = "#"
-    tide = "#"
-    soundcloud = "#"
-    pandora = "#"
-    play = "#"
-    if type == "album":
-        result = spotify.album(spotifyid)
-        album = result['name']
-        artist = result['artists'][0]['name']
-        lstfm = lastfm.get_album(artist, album).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
-        deez = "album/" + str(deez[0].asdict()['id'])
-        tid = tidal.search('album', album)
-        for i in tid.albums:
-            if i.name.lower().strip() == album.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
-                tide = "album/" + str(i.id)
-                break
-        result = google_search(album + " by " + artist, google_id, soundcloud_id)
-        for i in result['items']:
-            if '/sets/' in i['link']:
-                soundcloud = i['link'][23:]
-                break
-        result = google_search(album + " by " + artist, google_id, pandora_id)
-        for i in result['items']:
-            pandora = i['link'][31:]
-            break
-        result = google_search(album + " by " + artist, google_id, play_id)
-        for i in result['items']:
-            if 'https://play.google.com/store/music/' in i['link']:
-                print(i['link'])
-                play = i['link'][36:]
-                break
-    elif type == "track":
-        result = spotify.track(spotifyid)
-        album = result['album']['name']
-        track = result['name']
-        artist = result['artists'][0]['name']
-        lstfm = lastfm.get_track(artist, track).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
-        deez = "track/" + str(deez[0].asdict()['id'])
-        tid = tidal.search('track', track)
-        for i in tid.tracks:
-            if i.name.lower().strip() == track.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
-                tide = "track/" + str(i.id)
-                break
-        result = google_search(track + " by " + artist, google_id, soundcloud_id)
-        for i in result['items']:
-            soundcloud = i['link'][23:]
-            break
-        result = google_search(track + " by " + artist, google_id, pandora_id)
-        for i in result['items']:
-            pandora = i['link'][31:]
-            break
-        result = google_search(track + " by " + artist, google_id, play_id)
-        for i in result['items']:
-            if 'https://play.google.com/store/music/' in i['link']:
-                print(i['link'])
-                play = i['link'][36:]
-                break
-    elif type == "artist":
-        result = spotify.artist(spotifyid)
-        artist = result['name']
-        lstfm = lastfm.get_artist(artist).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist}, relation="artist")
-        deez = "artist/" + str(deez[0].asdict()['id'])
-        tid = tidal.search('artist', artist)
-        for i in tid.artists:
-            if i.name.lower().strip() == artist.lower().strip():
-                tide = "artist/" + str(i.id)
-                break
-        # Unable to do SoundCloud for artist
-        result = google_search(artist, google_id, pandora_id)
-        for i in result['items']:
-            pandora = i['link'][31:]
-            break
-        result = google_search(artist, google_id, play_id)
-        for i in result['items']:
-            if 'https://play.google.com/store/music/' in i['link']:
-                print(i['link'])
-                play = i['link'][36:]
-                break
-    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud, pandora=pandora, play=play)
+    info = get_music_info(type, spotifyid)
+    services = get_services(type, info[0], info[1], info[2])
+    
+    song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=services['lstfm'], deezer=services['deez'], tidal=services['tide'],     soundcloud=services['soundcloud'], pandora=services['pandora'], play=services['play'])
+    
     db.session.add(song)
     db.session.commit()
     return redirect(url_for('load', url=key))
 
 
+def get_music_info(type, spotifyid):
+    album = ""
+    track = ""
+    artist = ""
+    if type == "album":
+        result = spotify.album(spotifyid)
+        album = result['name']
+        artist = result['artists'][0]['name']
+    elif type == "track":
+        result = spotify.track(spotifyid)
+        album = result['album']['name']
+        track = result['name']
+        artist = result['artists'][0]['name']
+    elif type == "artist":
+        result = spotify.artist(spotifyid)
+        artist = result['name']
+    return [album, track, artist]
+    
+    
 @app.route('/s/<url>')
 def load(url):
     song = db.session.query(Song).filter(Song.url == url)
@@ -174,14 +91,25 @@ def load(url):
         return "404 url not in database"
     else:
         # v v v pass in links to this dictionary list v v v
-        links = [{'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}]
+        links = {'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}
+        print('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)
+        #TODO get the rest of the links from song and add them to links list
         data = fetchattributes(song[0].type, song[0].spotifyid)
         if song[0].type == 'track':
-            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
+            if len(data['album']['images']) != 0:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
+            else:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
         elif song[0].type == 'album':
-            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
+            if len(data['images']) != 0:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
+            else:
+                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
         else:
-            info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
+            if len(data['images']) != 0:
+                info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
+            else:
+                info = {'name': data['name'], 'artist': data['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
 
         return render_template('landing.html', link=links, data=data, url=url, info=info )
 
