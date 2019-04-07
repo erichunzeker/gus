@@ -47,10 +47,12 @@ tidal.login(tidal_id, tidal_secret)
 
 pp = pprint.PrettyPrinter(indent=4)
 
+
 def google_search(search_term, api_key, cse_id, **kwargs):
     service = build("customsearch", "v1", developerKey=api_key)
     res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
     return res
+
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -85,6 +87,10 @@ def create(type, spotifyid):
     soundcloud = "#"
     pandora = "#"
     play = "#"
+
+    tide = None
+    play = None
+
     if type == "album":
         result = spotify.album(spotifyid)
         album = result['name']
@@ -163,6 +169,7 @@ def create(type, spotifyid):
             for i in result['items']:
                 pandora = i['link'][31:]
                 break
+    pandora = "pandorasucks" #do this till db is fixed
         result = google_search(artist, google_id, play_id)
         if 'item' in result.keys():
             for i in result['items']:
@@ -185,21 +192,53 @@ def load(url):
         # v v v pass in links to this dictionary list v v v
         links = [{'spotify': ('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)}]
         data = fetchattributes(song[0].type, song[0].spotifyid)
-        if song[0].type == 'track':
-            if len(data['album']['images']) != 0:
-                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
-            else:
-                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
-        elif song[0].type == 'album':
-            if len(data['images']) != 0:
-                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
-            else:
-                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
+        spotifybase = "https://open.spotify.com/" + song[0].type + "/"
+        lastfmbase = "https://www.last.fm/music/"
+        deezerbase = "https://www.deezer.com/"
+        tidalbase = "https://tidal.com/browse/"
+        # soundcloudbase = "https://soundcloud.com/"
+        # pandorabase = ""
+        playbase = "https://play.google.com/store/music/"
+
+        if not song[0].spotifyid:
+            spid = "nada"
         else:
-            if len(data['images']) != 0:
-                info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
-            else:
-                info = {'name': data['name'], 'artist': data['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
+            spid = song[0].spotifyid
+
+        if not song[0].lastfm:
+            lfm = "nada"
+        else:
+            lfm = song[0].lastfm
+
+        if not song[0].deezer:
+            dz = "nada"
+        else:
+            dz = song[0].deezer
+
+        if not song[0].tidal:
+            tid = "nada"
+        else:
+            tid = song[0].tidal
+
+        if not song[0].play:
+            pl = "nada"
+        else:
+            pl = song[0].play
+
+        if song[0].type == 'track':
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url'],
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + lfm, 'deezer': deezerbase + dz,
+                    'tidal': tidalbase + tid, 'play': playbase + pl}
+        elif song[0].type == 'album':
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url'],
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + song[0].lastfm,
+                    'deezer': deezerbase + song[0].deezer,
+                    'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
+        else:
+            info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url'],
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + song[0].lastfm,
+                    'deezer': deezerbase + song[0].deezer,
+                    'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
 
         return render_template('landing.html', link=links, data=data, url=url, info=info )
 
@@ -217,6 +256,7 @@ def getdata(toggle, query):
     count = 0
     data = []
     results = spotify.search(q=toggle + ':' + query, type=toggle, limit=15)
+    print(results)
 
     if toggle == 'track':
         for i in results['tracks']['items']:
@@ -260,6 +300,7 @@ def getdata(toggle, query):
             count += 1
 
     return data
+
 
 if __name__ == '__main__':
     app.run()
