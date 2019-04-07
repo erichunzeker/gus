@@ -38,25 +38,25 @@
     <h2>links</h2>
     <table>
         <tr>
-            {% if info['spotify'] != 'nein' %}
+            {% if info['spotify'] != 'nada' %}
                 <td>
                     <a href="{{ info['spotify'] }}" target="_blank">spotify</a>
                 </td>
             {% endif %}
 
-            {% if info['lastfm'] != 'nein' %}
+            {% if info['lastfm'] != 'nada' %}
                 <td>
                     <a href="{{ info['lastfm']}}" target="_blank">last.fm</a>
                 </td>
             {% endif %}
 
-            {% if info['deezer'] != 'https://www.deezer.com/nein' %}
+            {% if info['deezer'] != 'https://www.deezer.com/nada' %}
                 <td>
                     <a href="{{ info['deezer']}}" target="_blank">deezer</a>
                 </td>
             {% endif %}
 
-            {% if info['tidal'] != 'https://tidal.com/browse/nein' %}
+            {% if info['tidal'] != 'https://tidal.com/browse/nada' %}
                 <td>
                     <a href="{{ info['tidal']}}" target="_blank">tidal</a>
                 </td>
