@@ -83,7 +83,6 @@ def get_music_info(type, spotifyid):
         artist = result['name']
     return [album, track, artist]
     
-    
 @app.route('/s/<url>')
 def load(url):
     song = db.session.query(Song).filter(Song.url == url)
