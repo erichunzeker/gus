@@ -169,7 +169,6 @@ def create(type, spotifyid):
             for i in result['items']:
                 pandora = i['link'][31:]
                 break
-    pandora = "pandorasucks" #do this till db is fixed
         result = google_search(artist, google_id, play_id)
         if 'item' in result.keys():
             for i in result['items']:
@@ -177,6 +176,7 @@ def create(type, spotifyid):
                     print(i['link'])
                     play = i['link'][36:]
                     break
+    pandora = "pandorasucks"  # do this till db is fixed
     song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud, pandora=pandora, play=play)
     db.session.add(song)
     db.session.commit()
