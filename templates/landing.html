@@ -59,9 +59,12 @@
                     <a href="{{ info['tidal']}}" target="_blank">tidal</a>
                 </td>
             {% endif %}
-            <td>
-                <a href="{{ info['play']}}" target="_blank">google play</a>
-            </td>
+
+            {% if info['play'] != 'https://play.google.com/store/music/nada' %}
+                <td>
+                    <a href="{{ info['play']}}" target="_blank">google play</a>
+                </td>
+            {% endif %}
         </tr>
     </table>
 </div>

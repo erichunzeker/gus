@@ -231,16 +231,14 @@ def load(url):
                     'tidal': tidalbase + tid, 'play': playbase + pl}
         elif song[0].type == 'album':
             info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url'],
-                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + song[0].lastfm,
-                    'deezer': deezerbase + song[0].deezer,
-                    'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + lfm, 'deezer': deezerbase + dz,
+                    'tidal': tidalbase + tid, 'play': playbase + pl}
         else:
             info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url'],
-                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + song[0].lastfm,
-                    'deezer': deezerbase + song[0].deezer,
-                    'tidal': tidalbase + song[0].tidal, 'play': playbase + song[0].play}
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + lfm, 'deezer': deezerbase + dz,
+                    'tidal': tidalbase + tid, 'play': playbase + pl}
 
-        return render_template('landing.html', link=links, data=data, url=url, info=info )
+        return render_template('landing.html', link=links, data=data, url=url, info=info)
 
 
 def fetchattributes(type, id):
