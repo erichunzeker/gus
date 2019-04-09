@@ -54,7 +54,6 @@ def create(type, spotifyid):
     if song.count() != 0:
         return redirect(url_for('load', url=song[0].url))
     
-    key = generateKey()
     info = get_music_info(type, spotifyid)
     services = get_services(type, info[0], info[1], info[2])
     
@@ -94,23 +93,54 @@ def load(url):
         print('https://open.spotify.com/' + song[0].type + '/' + song[0].spotifyid)
         #TODO get the rest of the links from song and add them to links list
         data = fetchattributes(song[0].type, song[0].spotifyid)
+        spotifybase = "https://open.spotify.com/" + song[0].type + "/"
+        lastfmbase = "https://www.last.fm/music/"
+        deezerbase = "https://www.deezer.com/"
+        tidalbase = "https://tidal.com/browse/"
+        # soundcloudbase = "https://soundcloud.com/"
+        # pandorabase = ""
+        playbase = "https://play.google.com/store/music/"
+
+        if not song[0].spotifyid:
+            spid = "nada"
+        else:
+            spid = song[0].spotifyid
+
+        if not song[0].lastfm:
+            lfm = "nada"
+        else:
+            lfm = song[0].lastfm
+
+        if not song[0].deezer:
+            dz = "nada"
+        else:
+            dz = song[0].deezer
+
+        if not song[0].tidal:
+            tid = "nada"
+        else:
+            tid = song[0].tidal
+
+        if not song[0].play:
+            pl = "nada"
+        else:
+            pl = song[0].play
+
         if song[0].type == 'track':
             if len(data['album']['images']) != 0:
                 info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['album']['images'][0]['url']}
             else:
                 info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
         elif song[0].type == 'album':
-            if len(data['images']) != 0:
-                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url']}
-            else:
-                info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
+            info = {'name': data['name'], 'artist': data['artists'][0]['name'], 'img': data['images'][0]['url'],
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + lfm, 'deezer': deezerbase + dz,
+                    'tidal': tidalbase + tid, 'play': playbase + pl}
         else:
-            if len(data['images']) != 0:
-                info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url']}
-            else:
-                info = {'name': data['name'], 'artist': data['name'], 'img': "http://g-u-s.herokuapp.com/static/img/note.png"}
+            info = {'name': data['name'], 'artist': data['name'], 'img': data['images'][0]['url'],
+                    'spotify': spotifybase + spid, 'lastfm': lastfmbase + lfm, 'deezer': deezerbase + dz,
+                    'tidal': tidalbase + tid, 'play': playbase + pl}
 
-        return render_template('landing.html', link=links, data=data, url=url, info=info )
+        return render_template('landing.html', link=links, data=data, url=url, info=info)
 
 
 def fetchattributes(type, id):
@@ -126,6 +156,7 @@ def getdata(toggle, query):
     count = 0
     data = []
     results = spotify.search(q=toggle + ':' + query, type=toggle, limit=15)
+    print(results)
 
     if toggle == 'track':
         for i in results['tracks']['items']:
@@ -169,6 +200,7 @@ def getdata(toggle, query):
             count += 1
 
     return data
+
 
 if __name__ == '__main__':
     app.run()

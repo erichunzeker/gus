@@ -1,10 +1,7 @@
-# SWE-Spring2019
+# gus
 
-## todo 
- - rename project
- - set up project managment 
- - rename github project and make it public
-
-## Resources
- - [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
- - [How to setup Flask on Heroku (I can do all of this)](https://gist.github.com/mayukh18/2223bc8fc152631205abd7cbf1efdd41/)
+## about 
+ 
+ g-u-s.herokuapp.com is a website to search and share music in one unified page. type a song, album, or artist into the website and select the correct result and a page will appear with all of the necessary information to share.
+ 
+ copy the gus link to share a page containing links to all streaming services so everyone can get to the music easily

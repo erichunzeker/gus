@@ -12,31 +12,59 @@
     <table>
         <tr>
             <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">copy link</a>
+                <a href="g-u-s.herokuapp.com/s/{{ url }}" onclick="copylink()" id="copylink">copy link</a>
+                <script>
+                    function copylink() {
+                      var copyText = document.getElementById("copylink");
+                      copyText.select();
+                      document.execCommand("copy");
+                      alert("Copied the text: " + copyText.value);
+                    }
+                </script>
+
             </td>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">copy link</a>
+            <td align="right">
+                <div class="sharethis-inline-share-buttons">share</div>
             </td>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">copy link</a>
-            </td>
+
         </tr>
     </table>
 </div>
 
 
 <div id="shareable">
+    <h2>links</h2>
     <table>
         <tr>
-            <td align="center">
-                <a href="{{ link['spotify'] }}">spotify</a>
-            </td>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">apple music</a>
-            </td>
-            <td align="center">
-                <a href="g-u-s.herokuapp.com/s/{{ url }}">deezer</a>
-            </td>
+            {% if info['spotify'] != 'nada' %}
+                <td>
+                    <a href="{{ info['spotify'] }}" target="_blank">spotify</a>
+                </td>
+            {% endif %}
+
+            {% if info['lastfm'] != 'nada' %}
+                <td>
+                    <a href="{{ info['lastfm']}}" target="_blank">last.fm</a>
+                </td>
+            {% endif %}
+
+            {% if info['deezer'] != 'https://www.deezer.com/nada' %}
+                <td>
+                    <a href="{{ info['deezer']}}" target="_blank">deezer</a>
+                </td>
+            {% endif %}
+
+            {% if info['tidal'] != 'https://tidal.com/browse/nada' %}
+                <td>
+                    <a href="{{ info['tidal']}}" target="_blank">tidal</a>
+                </td>
+            {% endif %}
+
+            {% if info['play'] != 'https://play.google.com/store/music/nada' %}
+                <td>
+                    <a href="{{ info['play']}}" target="_blank">google play</a>
+                </td>
+            {% endif %}
         </tr>
     </table>
 </div>
