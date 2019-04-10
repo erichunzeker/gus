@@ -12,13 +12,15 @@
     <table>
         <tr>
             <td align="center">
-                <a href="https://g-u-s.herokuapp.com/s/{{ url }}" onclick="copylink()" id="copylink">copy link</a>
+                <a href="https://g-u-s.herokuapp.com/s/{{ url }}" onclick="copyToClipboard("https://g-u-s.herokuapp.com/s/{{ url }}")" id="copylink">copy link</a>
                 <script>
-                    function copylink() {
-                      var copyText = document.getElementById("copylink");
-                      copyText.select();
-                      document.execCommand("copy");
-                      alert("Copied the text: " + copyText.value);
+                    function copyToClipboard(text){
+                        var dummy = document.createElement("input");
+                        document.body.appendChild(dummy);
+                        dummy.setAttribute('value', text);
+                        dummy.select();
+                        document.execCommand("copy");
+                        document.body.removeChild(dummy);
                     }
                 </script>
 
