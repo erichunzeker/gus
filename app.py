@@ -81,14 +81,11 @@ def create(type, spotifyid):
         return redirect(url_for('load', url=song[0].url))
 
     key = generateKey()
-    lstfm = "#"
-    deez = "#"
-    tide = "#"
-    soundcloud = "#"
-    pandora = "#"
-    play = "#"
-
+    lstfm = None
+    deez = None
     tide = None
+    soundcloud = None
+    pandora = None
     play = None
 
     if type == "album":
@@ -200,10 +197,7 @@ def load(url):
         # pandorabase = ""
         playbase = "https://play.google.com/store/music/"
 
-        if not song[0].spotifyid:
-            spid = "nada"
-        else:
-            spid = song[0].spotifyid
+        spid = song[0].spotifyid
 
         if not song[0].lastfm:
             lfm = "nada"
