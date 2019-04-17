@@ -93,8 +93,10 @@ def create(type, spotifyid):
         album = result['name']
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_album(artist, album).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
-        deez = "album/" + str(deez[0].asdict()['id'])
+        deezer = deezerClient.advanced_search({"artist": artist, "album": album}, relation="album")
+        for i in deezer:
+        	deez = "album/" + str(i.asdict()['id'])
+        	break
         tid = tidal.search('album', album)
         for i in tid.albums:
             if i.name.lower().strip() == album.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
@@ -124,9 +126,11 @@ def create(type, spotifyid):
         track = result['name']
         artist = result['artists'][0]['name']
         lstfm = lastfm.get_track(artist, track).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
-        deez = "track/" + str(deez[0].asdict()['id'])
-        tid = tidal.search('track', track)
+        deezer = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
+        for i in deezer:
+        	deez = "track/" + str(i.asdict())['id']
+        	break
+	        tid = tidal.search('track', track)
         for i in tid.tracks:
             if i.name.lower().strip() == track.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
                 tide = "track/" + str(i.id)
@@ -152,8 +156,9 @@ def create(type, spotifyid):
         result = spotify.artist(spotifyid)
         artist = result['name']
         lstfm = lastfm.get_artist(artist).get_url()[26:]
-        deez = deezerClient.advanced_search({"artist": artist}, relation="artist")
-        deez = "artist/" + str(deez[0].asdict()['id'])
+        deezer = deezerClient.advanced_search({"artist": artist}, relation="artist")
+        for i in deezer:
+        	deez = "artist/" + str(i.asdict()['id'])
         tid = tidal.search('artist', artist)
         if 'item' in result.keys():
             for i in tid.artists:
