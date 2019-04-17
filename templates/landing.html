@@ -12,12 +12,12 @@
     <table>
         <tr>
             <td align="center">
-                <a href="https://g-u-s.herokuapp.com/s/{{ url }}" onclick="copyToClipboard("https://g-u-s.herokuapp.com/s/{{ url }}")" id="copylink">copy link</a>
+                <a href="javascript:void();" onclick="copyToClipboard()" id="copylink">copy link</a>
                 <script>
-                    function copyToClipboard(text){
+                    function copyToClipboard(){
                         var dummy = document.createElement("input");
                         document.body.appendChild(dummy);
-                        dummy.setAttribute('value', text);
+                        dummy.setAttribute('value', window.location.href);
                         dummy.select();
                         document.execCommand("copy");
                         document.body.removeChild(dummy);
