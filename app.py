@@ -102,6 +102,7 @@ def create(type, spotifyid):
             if i.name.lower().strip() == album.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
                 tide = "album/" + str(i.id)
                 break
+        '''
         result = google_search(album + " by " + artist, google_id, soundcloud_id)
         if 'item' in result.keys():
             for i in result['items']:
@@ -120,6 +121,7 @@ def create(type, spotifyid):
                     print(i['link'])
                     play = i['link'][36:]
                     break
+        '''
     elif type == "track":
         result = spotify.track(spotifyid)
         album = result['album']['name']
@@ -135,6 +137,7 @@ def create(type, spotifyid):
             if i.name.lower().strip() == track.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
                 tide = "track/" + str(i.id)
                 break
+        '''
         result = google_search(track + " by " + artist, google_id, soundcloud_id)
         if 'item' in result.keys():
             for i in result['items']:
@@ -152,6 +155,7 @@ def create(type, spotifyid):
                     print(i['link'])
                     play = i['link'][36:]
                     break
+        '''
     elif type == "artist":
         result = spotify.artist(spotifyid)
         artist = result['name']
@@ -166,6 +170,7 @@ def create(type, spotifyid):
                     tide = "artist/" + str(i.id)
                     break
         # Unable to do SoundCloud for artist
+        '''
         result = google_search(artist, google_id, pandora_id)
         if 'item' in result.keys():
             for i in result['items']:
@@ -178,6 +183,7 @@ def create(type, spotifyid):
                     print(i['link'])
                     play = i['link'][36:]
                     break
+        '''
     pandora = "pandorasucks"  # do this till db is fixed
     song = Song(url=key, type=type, spotifyid=spotifyid, lastfm=lstfm, deezer=deez, tidal=tide, soundcloud=soundcloud, pandora=pandora, play=play)
     db.session.add(song)
