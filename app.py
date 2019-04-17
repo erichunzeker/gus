@@ -128,7 +128,7 @@ def create(type, spotifyid):
         lstfm = lastfm.get_track(artist, track).get_url()[26:]
         deezer = deezerClient.advanced_search({"artist": artist, "album": album, "track": track}, relation="track")
         for i in deezer:
-        	deez = "track/" + str(i.asdict())['id']
+        	deez = "track/" + str(i.asdict()['id'])
         	break
         tid = tidal.search('track', track)
         for i in tid.tracks:
