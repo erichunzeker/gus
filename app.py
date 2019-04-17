@@ -130,7 +130,7 @@ def create(type, spotifyid):
         for i in deezer:
         	deez = "track/" + str(i.asdict())['id']
         	break
-	    tid = tidal.search('track', track)
+        tid = tidal.search('track', track)
         for i in tid.tracks:
             if i.name.lower().strip() == track.lower().strip() and i.artist.name.lower().strip() == artist.lower().strip():
                 tide = "track/" + str(i.id)
